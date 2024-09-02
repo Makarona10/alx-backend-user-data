@@ -19,4 +19,4 @@ class BasicAuth(Auth):
         elif authorization_header.startswith('Basic '):
             return None
         else:
-            return authorization_header[6:]
+            return authorization_header.split(" ")[-1]
