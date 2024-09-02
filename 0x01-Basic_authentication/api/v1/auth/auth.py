@@ -6,9 +6,7 @@ from typing import List, TypeVar
 
 
 class Auth:
-    def __init__(self):
-        '''Auth class init function'''
-        pass
+    """Manages the API authentication"""
 
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """Determines whether a given path requires authentication or not"""
