@@ -127,4 +127,6 @@ def update_user(user_id: str = None) -> str:
 @app_views.route('users/me', methods=['GET'], strict_slashes=False)
 def auth_user_retrieve():
     '''retrieve the authenticated User object'''
-    return request.current_user
+    return request.current_user\
+        if request.current_user is not None\
+        else abort(404)
