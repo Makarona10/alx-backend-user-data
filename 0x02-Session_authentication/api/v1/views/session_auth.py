@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-""" SessionAuth module """
+""" SessionAuth view module """
 
-from api.v1.auth.auth import Auth
 from models.user import User
 from flask import jsonify
-from api.v1.app import app_views, auth
+from api.v1.app import app_views
 from flask import request
 import os
 
@@ -23,6 +22,7 @@ def login():
         return jsonify({"error": "no user found for this email"}), 404
     for user in users:
         if user.is_valid_password(password):
+            from api.v1.app import auth
             session_id = auth.create_session(user.id)
             resp = jsonify(user.to_json())
             session_name = os.getenv('SESSION_NAME')
