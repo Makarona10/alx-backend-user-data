@@ -5,6 +5,7 @@ from models.user import User
 from flask import jsonify
 from api.v1.app import app_views
 from flask import request, abort
+from api.v1.auth.session_auth import SessionAuth
 import os
 
 
@@ -34,6 +35,7 @@ def login():
 def logout():
     '''ends the session and logs user out'''
     from api.v1.app import auth
-    if auth.destroy_session(request) == False:
+    check = auth.destroy_session(request)
+    if not check or check == False:
         abort(404)
     return jsonify({}), 200
