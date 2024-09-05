@@ -3,7 +3,7 @@
 
 from flask import request
 from typing import List, TypeVar
-
+import os
 
 class Auth:
     """Manages the API authentication"""
@@ -39,3 +39,10 @@ class Auth:
     def current_user(self, request=None) -> TypeVar('User'):
         '''request will be the Flask request object'''
         return None
+    
+    def session_cookie(self, request=None):
+        '''returns a cookie value from a request'''
+        if request is None:
+            return None
+        os.environ["SESSION_NAME"] = request.get('_my_session_id')
+        return request.get('_my_session_id')
