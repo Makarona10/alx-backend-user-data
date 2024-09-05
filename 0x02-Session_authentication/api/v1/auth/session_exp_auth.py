@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 class SessionExpAuth(SessionAuth):
     '''SessionAuth class'''
     def __init__(self):
+        '''SessionExpAuth initialization function'''
         try:
             self.session_duration = int(os.getenv('SESSION_DURATION'))
             if not self.session_duration:
@@ -35,7 +36,7 @@ class SessionExpAuth(SessionAuth):
             return s_dic.get(session_id).get("user_id")
         if not s_dic.get(session_id).get("created_at"):
             return None
-        if (s_dic.get(session_id).get("created_at") +
-           timedelta(seconds=self.session_duration)) < datetime.now():
+        if s_dic.get(session_id).get("created_at")\
+           + timedelta(seconds=self.session_duration) < datetime.now():
             return None
         return s_dic.get(session_id).get("user_id")
