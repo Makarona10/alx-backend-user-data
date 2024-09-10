@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Flask app module"""
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 from auth import Auth
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -25,6 +25,20 @@ def users():
     except NoResultFound:
         user = AUTH.register_user(email, password)
         return jsonify({"email": user.email, "message": "user created"}), 200
+
+
+@app.route("/sessions", methods=['POST'], strict_slashes=False)
+def login():
+    """Handles the login process"""
+    print("--------------------------------")
+    email = request.form.get(key='email')
+    password = request.form.get(key='password')
+    exist = AUTH.valid_login(email, password)
+    if exist is False:
+        abort(401)
+    session_id = AUTH.create_session(email)
+    request.cookies.session_id = session_id
+    return jsonify({"email": email, "message": "logged in"}), 200
 
 
 if __name__ == "__main__":
