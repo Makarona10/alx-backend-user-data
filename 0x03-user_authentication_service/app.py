@@ -50,7 +50,7 @@ def logout():
     if not user:
         abort(403)
     AUTH.destroy_session(user.id)
-    redirect('http://127.0.0.1:5000/')
+    redirect('/')
 
 
 if __name__ == "__main__":
