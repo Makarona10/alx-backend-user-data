@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Flask app module"""
 
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort, make_response
 from auth import Auth
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -36,8 +36,10 @@ def login():
     if exist is False:
         abort(401)
     session_id = AUTH.create_session(email)
-    request.cookies.session_id = session_id
-    return jsonify({"email": email, "message": "logged in"}), 200
+    res = make_response(
+            jsonify({"email": email, "message": "logged in"}), 200)
+    res.set_cookie("session_id", session_id)
+    return res
 
 
 if __name__ == "__main__":
