@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
 """DB module
 """
+
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
-from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.exc import InvalidRequestError
-
 from user import Base, User
-
-from typing import TypeVar
+from sqlalchemy.exc import InvalidRequestError, NoResultFound
 
 
 class DB:
@@ -35,32 +31,29 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """Adds a new user to the data base
-        """
+        '''adds a new user to database'''
         user = User(email=email, hashed_password=hashed_password)
         self._session.add(user)
         self._session.commit()
         return user
 
     def find_user_by(self, **kwargs) -> User:
-        """Find a user with given attributes
-        """
+        """find a user by passed arguments"""
         for key in kwargs:
             if not hasattr(User, key):
                 raise InvalidRequestError
         user = self._session.query(User).filter_by(**kwargs).first()
-        if user is None:
+        if not user:
             raise NoResultFound
         return user
 
-    def update_user(self, user_id: int, **kwargs) -> None:
-        """Updates an existing user
-        """
+    def update_user(self, user_id: int, **kwargs):
+        """Updates a user existed in database"""
         user = self.find_user_by(id=user_id)
-        for key, value in kwargs.items():
-            if hasattr(user, key):
-                setattr(user, key, value)
+        for k, val in kwargs.items():
+            if hasattr(user, k):
+                setattr(user, k, val)
             else:
                 raise ValueError
-        self.__session.add(user)
         self._session.commit()
+        return None
