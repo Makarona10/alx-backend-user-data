@@ -6,6 +6,7 @@ import requests
 
 url = "http://127.0.0.1:5000"
 
+
 def register_user(email: str, password: str) -> None:
     expected = {"email": email, "message": "user created"}
     res = requests.post(f'{url}/users', data={
