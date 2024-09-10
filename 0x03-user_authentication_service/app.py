@@ -46,11 +46,15 @@ def login():
 def logout() -> str:
     """Handles the logout process"""
     session_id = request.cookies.get("session_id")
+    # Retrieve the user associated with the session ID
     user = AUTH.get_user_from_session_id(session_id)
-    if not user:
+    # If no user is found, abort the request with a 403 Forbidden error
+    if user is None:
         abort(403)
+    # Destroy the session associated with the user
     AUTH.destroy_session(user.id)
-    return redirect('/')
+    # Redirect to the home route
+    return redirect("/")
 
 
 if __name__ == "__main__":
