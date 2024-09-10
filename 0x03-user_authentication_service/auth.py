@@ -40,11 +40,13 @@ class Auth:
 
     def valid_login(self, email, password) -> User:
         """Validates login process"""
-        user = self._db.find_user_by(email=email)
-        if user:
-            result = bcrypt.checkpw(password, user.hashed_password)
+        try:
+            user = self._db.find_user_by(email=email)
+            pw = password.encode('utf-8')
+            result = bcrypt.checkpw(pw, user.hashed_password)
             return result
-        return False
+        except NoResultFound:
+            return False
 
     def create_session(self, email) -> str:
         """creates a session for a user"""
@@ -55,3 +57,15 @@ class Auth:
             return session_id
         except NoResultFound:
             return None
+
+email = 'bob@bob.com'
+password = 'MyPwdOfBob'
+auth = Auth()
+
+print(auth.register_user(email, password))
+
+print(auth.valid_login(email, password))
+
+print(auth.valid_login(email, "WrongPwd"))
+
+print(auth.valid_login("unknown@email", password))
