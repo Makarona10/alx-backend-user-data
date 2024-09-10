@@ -42,9 +42,8 @@ class Auth:
         """Validates login process"""
         try:
             user = self._db.find_user_by(email=email)
-            pw = password.encode('utf-8')
-            result = bcrypt.checkpw(pw, user.hashed_password)
-            return result
+            pw = password.encode()
+            return bcrypt.checkpw(pw, user.hashed_password)
         except NoResultFound:
             return False
 
