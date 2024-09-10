@@ -57,15 +57,3 @@ class Auth:
             return session_id
         except NoResultFound:
             return None
-
-email = 'bob@bob.com'
-password = 'MyPwdOfBob'
-auth = Auth()
-
-print(auth.register_user(email, password))
-
-print(auth.valid_login(email, password))
-
-print(auth.valid_login(email, "WrongPwd"))
-
-print(auth.valid_login("unknown@email", password))
