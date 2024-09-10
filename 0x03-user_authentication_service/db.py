@@ -56,5 +56,6 @@ class DB:
                 setattr(user, k, val)
             else:
                 raise ValueError
+        self.__session.add(user)
         self._session.commit()
         return None
