@@ -2,7 +2,6 @@
 """DB module
 """
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from user import Base, User
@@ -33,11 +32,11 @@ class DB:
     def add_user(self, email: str, hashed_password: str) -> User:
         '''adds a new user to database'''
         user = User(email=email, hashed_password=hashed_password)
-        self.__session.add(user)
-        self.__session.commit()
+        self._session.add(user)
+        self._session.commit()
         return user
 
-    def find_user_by(self, **kwargs):
+    def find_user_by(self, **kwargs) -> User:
         """find a user by passed arguments"""
         for key in kwargs:
             if not hasattr(User, key):
@@ -46,3 +45,14 @@ class DB:
         if not user:
             raise NoResultFound
         return user
+
+    def update_user(self, user_id: int, **kwargs):
+        """Updates a user existed in database"""
+        user = self.find_user_by(id=user_id)
+        for k, val in kwargs.items():
+            if hasattr(user, k):
+                setattr(user, k, val)
+            else:
+                raise ValueError
+        self._session.commit()
+        return None
