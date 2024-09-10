@@ -30,7 +30,6 @@ def users():
 @app.route("/sessions", methods=['POST'], strict_slashes=False)
 def login():
     """Handles the login process"""
-    print("--------------------------------")
     email = request.form.get(key='email')
     password = request.form.get(key='password')
     exist = AUTH.valid_login(email, password)
