@@ -38,14 +38,15 @@ class Auth:
             return user
         raise ValueError(f"User {user} already exists")
 
-    def valid_login(self, email, password) -> bool:
-        """Validates login process"""
+    def valid_login(self, email: str, password: str) -> bool:
+        """
+        Validates login credentials
+        """
         try:
             user = self._db.find_user_by(email=email)
         except NoResultFound:
             return False
-        pw = password.encode('utf-8')
-        return bcrypt.checkpw(pw, user.hashed_password)
+        return bcrypt.checkpw(password.encode(), user.hashed_password)
 
     def create_session(self, email) -> str:
         """creates a session for a user"""
