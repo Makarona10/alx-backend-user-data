@@ -48,7 +48,7 @@ class DB:
             raise NoResultFound
         return user
 
-    def update_user(self, user_id: int, **kwargs):
+    def update_user(self, user_id: int, **kwargs) -> None:
         """Updates a user existed in database"""
         user = self.find_user_by(id=user_id)
         for k, val in kwargs.items():
@@ -56,6 +56,4 @@ class DB:
                 setattr(user, k, val)
             else:
                 raise ValueError
-        self.__session.add(user)
         self._session.commit()
-        return None
