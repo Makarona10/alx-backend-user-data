@@ -10,18 +10,16 @@ app = Flask(__name__)
 AUTH = Auth()
 
 
-@app.errorhandler(401)
-def unauthorized(error) -> str:
-    """ Unauthorized error handler
-    """
-    return jsonify({"error": "Unauthorized"}), 401
+# @app.errorhandler(401)
+# def unauthorized() -> str:
+#     """Unauthorized error handler"""
+#     return jsonify({"error": "Unauthorized"}), 401
 
 
-@app.errorhandler(403)
-def unauthorized(error) -> str:
-    """ Forbidden error handler
-    """
-    return jsonify({"error": "Forbidden"}), 403
+# @app.errorhandler(403)
+# def unauthorized() -> str:
+#     """Forbidden error handler"""
+#     return jsonify({"error": "Forbidden"}), 403
 
 
 @app.route("/", methods=['GET'], strict_slashes=False)
@@ -73,7 +71,7 @@ def profile():
     session_id = request.cookies.get("session_id")
     user = AUTH.get_user_from_session_id(session_id)
     if user:
-        return jsonify({"email": user.email})
+        return jsonify({"email": user.email}), 200
     abort(403)
 
 
